@@ -4,3 +4,4 @@ dependencies:
     - markdown
     - pip:
       - pytest
+      - paramiko
