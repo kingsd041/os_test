@@ -1,0 +1,6 @@
+name: os_test
+dependencies:
+    - python==3.6
+    - markdown
+    - pip:
+      - pytest
