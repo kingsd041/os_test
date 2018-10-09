@@ -1,5 +1,5 @@
 # os_test
-Test framework for os
+Test tool for os
 
 * Init python environment with environment with environment.yml
 
