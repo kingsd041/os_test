@@ -1,15 +1,14 @@
 # coding=utf-8
 
-example_configs = {
-    'os': {
-        'ip': '',
-        'port': '',
-        'username': '',
-        'password': '',
+hvm_configs = {
+    'amazon_hvm': {
+        'ip': ('<Remote ip or host>',),
+        'username': '<Your remote host user name>',
+        'private_key_path': '<Your private key path>',
     },
-    'amazon_os': {
-        'ip': '',
-        'username': '',
-        'private_key_path': '',
-    }
+    'virtual_hvm': {
+        'ip': '<Remote ip or host>',
+        'username': '<Your remote host user name>',
+        'private_key_path': '<Your private key path>',
+    },
 }
