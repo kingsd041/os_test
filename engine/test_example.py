@@ -2,38 +2,28 @@
 
 from utils import *
 
-client = None
+CLIENT = None
 
 
-def get_amazon_client():
-    global client
-    client = setup_amazon()
+def init_client(ip):
+    global CLIENT
+    client = init_ssh_client(ip)
+    CLIENT = client
     if client:
-        print('Init succeed')
+        return True
     else:
-        print('Init failed')
-
-
-def get_client():
-    global client
-    client = setup_os()
-    if client:
-        print('Init succeed')
-    else:
-        print('Init failed')
+        return False
 
 
 def test_example():
     command = 'sudo mkdir /etc/test/ && sudo chmod 777 /etc/test/ && cd /etc/test/'
     try:
-        stdin, stdout, stderr = client.exec_command(command)
+        stdin, stdout, stderr = CLIENT.exec_command(command)
 
         st = stdout.read()
-        pull_file()
-
     except Exception as e:
         raise e
     else:
         assert st is not None
     finally:
-        client.close()
+        CLIENT.close()
