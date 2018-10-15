@@ -24,4 +24,4 @@ if __name__ == '__main__':
                 print('Init failed')
                 print('===================================')
     except Exception as e:
-        pass
+        raise e
