@@ -5,3 +5,6 @@ dependencies:
     - pip:
       - pytest
       - paramiko
+      - virtualenv
+      - tox
+      - flake8
