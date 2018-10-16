@@ -4,7 +4,6 @@ import os
 import pytest
 import paramiko
 from config import *
-from utils_config import _get_hvm_config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +14,6 @@ IP_OR_HOST = None
 # @pytest.fixture(scope='session')
 def init_ssh_client(ip):
     try:
-        # TODO Need to check folder which was named logs
         global IP_OR_HOST
         IP_OR_HOST = ip
         paramiko.util.log_to_file(BASE_DIR + '/logs/ssh.log')
@@ -51,3 +49,23 @@ def pull_file():
         raise e
     else:
         return transport
+
+
+def _get_hvm_config():
+    """
+    Get hvm config
+    :return:
+    """
+    return hvm_configs
+
+
+def get_ip_tuple():
+    """
+
+    :return:
+    """
+    ip_tuple = hvm_configs.get('amazon_hvm').get('ip')
+    if not ip_tuple:
+        raise Exception('Config is None')
+    else:
+        return ip_tuple
