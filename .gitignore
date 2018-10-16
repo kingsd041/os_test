@@ -106,3 +106,4 @@ venv.bak/
 # Add by Noctis 2018-10-9
 
 *.idea
+/ot_env
