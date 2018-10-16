@@ -9,6 +9,8 @@ if __name__ == '__main__':
     print('===================================')
 
     try:
+        if not os.path.exists(BASE_DIR+'/logs/'):
+            os.mkdir(BASE_DIR+'/logs/')
         ip_tuple = get_ip_tuple()
         for ip in ip_tuple:
             if init_client(ip):
