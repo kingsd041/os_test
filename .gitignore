@@ -107,3 +107,4 @@ venv.bak/
 
 *.idea
 /ot_env
+\.DS_Store
