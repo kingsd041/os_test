@@ -1,6 +1,11 @@
 # os_test
 Test tool for hvm 
 
+
+[![GitHub issues](https://img.shields.io/github/issues/Aisuko/os_test.svg)](https://github.com/Aisuko/os_test/issues) [![GitHub forks](https://img.shields.io/github/forks/Aisuko/os_test.svg)](https://github.com/Aisuko/os_test/network) [![GitHub stars](https://img.shields.io/github/stars/Aisuko/os_test.svg)](https://github.com/Aisuko/os_test/stargazers) [![GitHub license](https://img.shields.io/github/license/Aisuko/os_test.svg)](https://github.com/Aisuko/os_test/blob/tox/LICENSE)
+
+
+
 * Init python environment with environment with requirements.txt
 
     ```angular2html
