@@ -1,20 +1,16 @@
 # os_test
-Test tool for os
+Test tool for hvm 
 
-* Init python environment with environment with environment.yml
+* Init python environment with environment with requirements.txt
 
-```angular2html
-   conda env create -f environment.yml
-```
-* Update python environment with command below
+    ```angular2html
+    pip install -r requirements.txt
+  
+    ```
 
-```angular2html
-   conda env update -f environment.yml
-```
+# Succeed tested with tox
 
-* Add your functions to packaged was named engine
-
-
+![Scucceed pic](https://github.com/Aisuko/os_test/blob/tox/succeed.png)
 
 # License
 
