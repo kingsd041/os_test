@@ -2,3 +2,5 @@ pytest
 paramiko
 tox
 flake8
+pytest-cov
+coverage
