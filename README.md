@@ -31,7 +31,7 @@ source /your_env_name/bin/activate
 
 ```
 
-* Initializing environment which you had been created with requirements.txt
+* Initializing environment which you have been created with requirements.txt
 
  ```angular2html
     pip install -r requirements.txt
