@@ -106,3 +106,7 @@ venv.bak/
 # Add by Noctis 2018-10-9
 
 *.idea
+*.tox
+/ot_env
+/engine/*.xml
+\.DS_Store
