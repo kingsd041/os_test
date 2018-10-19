@@ -11,8 +11,12 @@ IP_OR_HOST = None
 
 
 # Function tips, It was defined that function can be used by a parameter. Init once time
-# @pytest.fixture(scope='session')
 def init_ssh_client(ip):
+    """
+
+    :param ip:
+    :return:
+    """
     try:
         global IP_OR_HOST
         IP_OR_HOST = ip
@@ -33,6 +37,10 @@ def init_ssh_client(ip):
 
 
 def pull_file():
+    """
+    Upload file to remote server.
+    :return:
+    """
     try:
         global IP_OR_HOST
         paramiko.util.log_to_file(BASE_DIR + '/logs/amazon_os.log')
