@@ -1,9 +1,7 @@
 name: os_test
 dependencies:
-    - python==3.6
+    - python==3.7
     - markdown
     - pip:
       - pytest
       - paramiko
-      - tox
-      - flake8
