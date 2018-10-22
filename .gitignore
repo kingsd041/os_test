@@ -106,7 +106,7 @@ venv.bak/
 # Add by Noctis 2018-10-9
 
 *.idea
-/ot_env
+/tox_env
 \.DS_Store
 
 engine/osTestsJunit\.xml
