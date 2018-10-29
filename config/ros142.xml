@@ -1,5 +1,5 @@
 <domain type='kvm'>
-    <name>rostest4</name>
+    <name name="virtual_name">rostest4</name>
     <memory>2048000</memory>
     <currentMemory>2048000</currentMemory>
     <vcpu>2</vcpu>
@@ -20,7 +20,7 @@
         <emulator>/usr/bin/kvm-spice</emulator>
         <disk type='file' device='disk'>
             <driver name='qemu' type='qcow2'/>
-            <source file='/opt/rostest3.qcow2'/>
+            <source file='/opt/rostest3.qcow2' span="qcow2"/>
             <target dev='hda' bus='ide'/>
             <boot order='1'/>
         </disk>
