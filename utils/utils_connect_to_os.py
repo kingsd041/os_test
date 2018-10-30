@@ -133,7 +133,7 @@ def init_virtual_machine():
                 yield ssh
             else:
                 yield None
-            
+
             dom.destroy()
             conn.close()
             st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
@@ -148,14 +148,6 @@ def setup_function():
 
 
 def teardown_function():
-    # try:
-    #     dom.destroy()
-    #     conn.close()
-    #     st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=VIRTUAL_NAME),
-    #                           shell=True)
-    #     st.wait()
-    # except Exception as e:
-    #     pass
     pass
 
 
