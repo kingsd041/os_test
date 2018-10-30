@@ -130,15 +130,17 @@ def init_virtual_machine():
 
                 time.sleep(90)
                 ssh = pexpect.spawn('ssh {username}@{ip}'.format(username='rancher', ip=ip))
-                return ssh
+                yield ssh
             else:
-                return None
+                yield None
+            
+            dom.destroy()
+            conn.close()
+            st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
+                                  shell=True)
+            st.wait()
     except Exception as e:
         raise e
-
-
-def shutdown_function():
-    pass
 
 
 def setup_function():
