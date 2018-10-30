@@ -31,7 +31,7 @@
         </disk>
         <disk type='file' device='disk'>
             <driver name='qemu' type='raw'/>
-            <source file='/root/configdrive.img'/>
+            <source file='/state/configdrive.img'/>
             <target dev='hdc' bus='ide'/>
             <address type='drive' controller='0' bus='1' target='0' unit='0'/>
         </disk>
