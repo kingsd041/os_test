@@ -3,15 +3,15 @@
 # Author :Bowen Lee
 
 
-def test_example(init_virtual_machine):
+def test_example(ros_kvm):
     """
     Testcase example for check rancher_os hostname.
-    :param init_virtual_machine:
+    :param ros_kvm:
     :return:
     """
     command = 'hostname'
     feed_back = 'rancher-test'
-    client = init_virtual_machine(cloud_config='http://192.168.1.24/ros/cloud-config.yml')
+    client = ros_kvm(cloud_config='http://192.168.1.24/ros/cloud-config.yml')
     client.sendline(command)
     number = client.expect(feed_back, timeout=10)
     assert (number == 0)

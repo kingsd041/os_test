@@ -19,12 +19,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 @pytest.fixture
-def init_virtual_machine():
+def ros_kvm():
     dom = None
     conn = None
     virtual_name = None
 
-    def _init_virtual_machine(cloud_config):
+    def ros_kvm(cloud_config):
         nonlocal virtual_name
         virtual_name = _id_generator()
         mac = _mac_generator()
@@ -74,7 +74,7 @@ def init_virtual_machine():
             else:
                 return None
 
-    yield _init_virtual_machine
+    yield ros_kvm
 
     dom.destroy()
     conn.close()
