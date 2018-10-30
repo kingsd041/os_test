@@ -87,62 +87,7 @@ def get_ip_tuple():
         return ip_tuple
 
 
-@pytest.fixture(scope='function')
-def init_virtual_machine():
-    try:
-        virtual_name = _id_generator()
-        mac = _mac_generator()
 
-        config_path = BASE_DIR + '/config/ros142.xml'
-        _create_xml(config_path, mac, virtual_name)
-
-        # open xml
-        xml_for_virtual = _load_xml(BASE_DIR + '/config/{virname}.xml'.format(virname=virtual_name))
-
-        check_create_qcow = subprocess.check_call(
-            'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
-            shell=True)
-        if not check_create_qcow == 0:
-            raise Exception('Create qcow faild')
-
-        conn = libvirt.open('qemu:///system')
-        if not conn:
-            raise Exception('Failed to open connection to qemu:///system')
-        else:
-            dom = conn.createXML(xml_for_virtual)
-            for _ in range(90):
-                time.sleep(1)
-                obj = subprocess.Popen('arp -an | grep {mac}'.format(mac=mac), stdin=subprocess.PIPE,
-                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
-                if len(obj) > 0:
-                    break
-                else:
-                    continue
-
-            if obj:
-                ip = str(obj, encoding='utf-8').split('(').__getitem__(1).split(')').__getitem__(0)
-            else:
-                ip = None
-
-            time.sleep(60)
-            if ip:
-                ssh_client_for_reinstall = pexpect.spawn('ssh {username}@{ip}'.format(username='rancher', ip=ip))
-                ssh_client_for_reinstall.sendline(
-                    'sudo ros install -c http://192.168.1.24/ros/cloud-config.yml -d /dev/sda -f')
-
-                time.sleep(90)
-                ssh = pexpect.spawn('ssh {username}@{ip}'.format(username='rancher', ip=ip))
-                yield ssh
-            else:
-                yield None
-
-            dom.destroy()
-            conn.close()
-            st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
-                                  shell=True)
-            st.wait()
-    except Exception as e:
-        raise e
 
 
 def setup_function():
