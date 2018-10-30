@@ -7,14 +7,9 @@ from __future__ import print_function
 import os
 import random
 import string
-import subprocess
-import time
 from xml.etree.ElementTree import ElementTree
 
-import libvirt
 import paramiko
-import pexpect
-import pytest
 
 from config import *
 
@@ -85,17 +80,6 @@ def get_ip_tuple():
         raise Exception('Config is None')
     else:
         return ip_tuple
-
-
-
-
-
-def setup_function():
-    pass
-
-
-def teardown_function():
-    pass
 
 
 def _if_match(node, kv_map):
