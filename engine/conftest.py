@@ -87,9 +87,14 @@ def get_ip_tuple():
         return ip_tuple
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture
 def init_virtual_machine():
-    try:
+    dom = None
+    conn = None
+    virtual_name = None
+
+    def _init_virtual_machine(cloud_config):
+        nonlocal virtual_name
         virtual_name = _id_generator()
         mac = _mac_generator()
 
@@ -105,10 +110,13 @@ def init_virtual_machine():
         if not check_create_qcow == 0:
             raise Exception('Create qcow faild')
 
+        nonlocal conn
         conn = libvirt.open('qemu:///system')
         if not conn:
             raise Exception('Failed to open connection to qemu:///system')
         else:
+
+            nonlocal dom
             dom = conn.createXML(xml_for_virtual)
             for _ in range(90):
                 time.sleep(1)
@@ -128,21 +136,22 @@ def init_virtual_machine():
             if ip:
                 ssh_client_for_reinstall = pexpect.spawn('ssh {username}@{ip}'.format(username='rancher', ip=ip))
                 ssh_client_for_reinstall.sendline(
-                    'sudo ros install -c http://192.168.1.24/ros/cloud-config.yml -d /dev/sda -f')
+                    'sudo ros install -c {cloud_config} -d /dev/sda -f'.format(
+                        cloud_config=cloud_config))
 
                 time.sleep(90)
                 ssh = pexpect.spawn('ssh {username}@{ip}'.format(username='rancher', ip=ip))
-                yield ssh
+                return ssh
             else:
-                yield None
+                return None
 
-            dom.destroy()
-            conn.close()
-            st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
-                                  shell=True)
-            st.wait()
-    except Exception as e:
-        raise e
+    yield _init_virtual_machine
+
+    dom.destroy()
+    conn.close()
+    st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
+                          shell=True)
+    st.wait()
 
 
 def setup_function():
