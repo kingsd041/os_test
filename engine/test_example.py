@@ -4,6 +4,11 @@
 
 
 def test_example(init_virtual_machine):
+    """
+    Testcase example for check rancher_os hostname.
+    :param init_virtual_machine:
+    :return:
+    """
     command = 'hostname'
     feed_back = 'rancher-test'
     client = init_virtual_machine(cloud_config='http://192.168.1.24/ros/cloud-config.yml')
