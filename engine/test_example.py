@@ -10,8 +10,3 @@ def test_example(init_virtual_machine):
     client.sendline(command)
     number = client.expect(feed_back, timeout=10)
     assert (number == 0)
-
-#
-# def test_example2(init_t):
-#     name = init_t('xiaoming')
-#     assert (name == 'xiaoming')
