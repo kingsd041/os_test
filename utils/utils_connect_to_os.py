@@ -18,11 +18,6 @@ from config import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-VIRTUAL_NAME = None
-MAC = None
-DOM = None
-CONN = None
-
 
 def init_ssh_client(ip):
     """
@@ -93,34 +88,29 @@ def get_ip_tuple():
 @pytest.fixture(scope='function')
 def init_virtual_machine():
     try:
-        global VIRTUAL_NAME
-        global MAC
-        VIRTUAL_NAME = _id_generator()
-        MAC = _mac_generator()
+        virtual_name = _id_generator()
+        mac = _mac_generator()
 
         config_path = BASE_DIR + '/config/ros142.xml'
-        _create_xml(config_path)
+        _create_xml(config_path, mac, virtual_name)
 
         # open xml
-        xml_for_virtual = _load_xml(BASE_DIR + '/config/{virname}.xml'.format(virname=VIRTUAL_NAME))
+        xml_for_virtual = _load_xml(BASE_DIR + '/config/{virname}.xml'.format(virname=virtual_name))
 
         check_create_qcow = subprocess.check_call(
-            'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=VIRTUAL_NAME),
+            'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
             shell=True)
         if not check_create_qcow == 0:
             raise Exception('Create qcow faild')
 
         conn = libvirt.open('qemu:///system')
-        global CONN
-        CONN = conn
         if not conn:
             raise Exception('Failed to open connection to qemu:///system')
         else:
-            global DOM
-            DOM = conn.createXML(xml_for_virtual)
+            dom = conn.createXML(xml_for_virtual)
             for _ in range(90):
                 time.sleep(1)
-                obj = subprocess.Popen('arp -an | grep {mac}'.format(mac=MAC), stdin=subprocess.PIPE,
+                obj = subprocess.Popen('arp -an | grep {mac}'.format(mac=mac), stdin=subprocess.PIPE,
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
                 if len(obj) > 0:
                     break
@@ -147,19 +137,24 @@ def init_virtual_machine():
         raise e
 
 
+def shutdown_function():
+    pass
+
+
 def setup_function():
     pass
 
 
 def teardown_function():
-    try:
-        DOM.destroy()
-        CONN.close()
-        st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=VIRTUAL_NAME),
-                              shell=True)
-        st.wait()
-    except Exception as e:
-        pass
+    # try:
+    #     dom.destroy()
+    #     conn.close()
+    #     st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=VIRTUAL_NAME),
+    #                           shell=True)
+    #     st.wait()
+    # except Exception as e:
+    #     pass
+    pass
 
 
 def _if_match(node, kv_map):
@@ -169,7 +164,7 @@ def _if_match(node, kv_map):
     return True
 
 
-def _create_xml(config_path):
+def _create_xml(config_path, mac, virtual_name):
     try:
         if os.path.exists(config_path):
             tree = _read_xml(config_path)
@@ -177,29 +172,29 @@ def _create_xml(config_path):
             # Insert virtual machine name
             nodes_kvm_name = _find_nodes(tree, 'name')
 
-            _change_node_text(nodes_kvm_name, VIRTUAL_NAME)
-            assert (tree.findtext('name') == VIRTUAL_NAME)
+            _change_node_text(nodes_kvm_name, virtual_name)
+            assert (tree.findtext('name') == virtual_name)
 
             # Insert disk typed 'qcow2'
             nodes_kvm_spice = _find_nodes(tree, 'devices/disk/source')
             node_kvm_spice = _get_node_by_key_value(nodes_kvm_spice, {'span': 'qcow2'})
 
             _change_node_attribute(node_kvm_spice,
-                                   {'file': '/opt/{machine_name}.qcow2'.format(machine_name=VIRTUAL_NAME)})
+                                   {'file': '/opt/{machine_name}.qcow2'.format(machine_name=virtual_name)})
             # Check machine qcow2
             _check_node_attribute(node_kvm_spice,
-                                  {'file': '/opt/{machine_name}.qcow2'.format(machine_name=VIRTUAL_NAME)})
+                                  {'file': '/opt/{machine_name}.qcow2'.format(machine_name=virtual_name)})
 
             # Insert MAC address
             node_kvm_mac = _find_nodes(tree, 'devices/interface/mac')
-            _change_node_attribute(node_kvm_mac, {'address': MAC})
+            _change_node_attribute(node_kvm_mac, {'address': mac})
 
             # Check mac address
-            _check_node_attribute(node_kvm_mac, {'address': MAC})
+            _check_node_attribute(node_kvm_mac, {'address': mac})
 
             # Return XMl config
 
-            tree.write(BASE_DIR + '/config/{virtualenv_name}.xml'.format(virtualenv_name=VIRTUAL_NAME),
+            tree.write(BASE_DIR + '/config/{virtualenv_name}.xml'.format(virtualenv_name=virtual_name),
                        encoding="utf-8",
                        xml_declaration=True)
 
