@@ -35,11 +35,9 @@ def init_virtual_machine():
         # open xml
         xml_for_virtual = _load_xml(BASE_DIR + '/config/{virname}.xml'.format(virname=virtual_name))
 
-        check_create_qcow = subprocess.check_call(
+        subprocess.Popen(
             'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
             shell=True)
-        if not check_create_qcow == 0:
-            raise Exception('Create qcow faild')
 
         nonlocal conn
         conn = libvirt.open('qemu:///system')
