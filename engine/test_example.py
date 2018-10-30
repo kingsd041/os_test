@@ -2,8 +2,6 @@
 # Create date: 2018-10-29
 # Author :Bowen Lee
 
-from utils import *
-
 
 def test_example(init_virtual_machine):
     command = 'hostname'
