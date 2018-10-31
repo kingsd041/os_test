@@ -1,5 +1,5 @@
 <domain type='kvm'>
-    <name>rostest4</name>
+    <name>Virtual machine name</name>
     <memory>2048000</memory>
     <currentMemory>2048000</currentMemory>
     <vcpu>2</vcpu>
@@ -20,7 +20,7 @@
         <emulator>/usr/bin/kvm-spice</emulator>
         <disk type='file' device='disk'>
             <driver name='qemu' type='qcow2'/>
-            <source file='/opt/rostest3.qcow2' span="qcow2"/>
+            <source file='/opt/virtual_machine_name.qcow2' span="qcow2"/>
             <target dev='hda' bus='ide'/>
             <boot order='1'/>
         </disk>
@@ -37,7 +37,7 @@
         </disk>
         <interface type='bridge'>
             <source bridge='virbr0'/>
-            <mac address="00:16:3e:5d:aa:c8"/>
+            <mac address="ipv6 mac address"/>
         </interface>
         <input type='mouse' bus='ps2'/>
         <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0' keymap='en-us'/>
