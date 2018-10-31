@@ -1,5 +1,5 @@
 <domain type='kvm'>
-    <name name="virtual_name">rostest4</name>
+    <name>rostest4</name>
     <memory>2048000</memory>
     <currentMemory>2048000</currentMemory>
     <vcpu>2</vcpu>
