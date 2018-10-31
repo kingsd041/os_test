@@ -3,9 +3,9 @@
 # Author :Bowen Lee
 
 
-def test_example(ros_kvm):
+def test_hostname(ros_kvm):
     """
-    Testcase example for check rancher_os hostname.
+    Test case for check hostname after rancher os has been installed succeed.
     :param ros_kvm:
     :return:
     """
