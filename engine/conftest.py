@@ -10,7 +10,6 @@ import string
 import subprocess
 import time
 from xml.etree.ElementTree import ElementTree
-
 import libvirt
 import pexpect
 import pytest
@@ -29,11 +28,49 @@ def ros_kvm():
         virtual_name = _id_generator()
         mac = _mac_generator()
 
-        config_path = BASE_DIR + '/config/ros142.xml'
-        _create_xml(config_path, mac, virtual_name)
+        example = '''<domain type='kvm'>
+        <name>{virtual_name}</name>
+        <memory>2048000</memory>
+        <currentMemory>2048000</currentMemory>
+        <vcpu>2</vcpu>
+        <os>
+        <type arch='x86_64' machine='pc'>hvm</type>
+        <bootmenu enable='no'/>
+        </os>
+        <features><acpi/><apic/><pae/></features>
+        <clock offset='localtime'/>
+        <on_poweroff>destroy</on_poweroff>
+        <on_reboot>restart</on_reboot>
+        <on_crash>destroy</on_crash>
+        <devices>
+        <emulator>/usr/bin/kvm-spice</emulator>
+        <disk type='file' device='disk'>
+        <driver name='qemu' type='qcow2'/>
+        <source file='/opt/{v_name_for_source}.qcow2' span="qcow2"/>
+        <target dev='hda' bus='ide'/>
+        <boot order='1'/>
+        </disk>
+        <disk type='file' device='cdrom'>
+        <source file='/root/rancheros-v1.4.2-rc1.iso'/>
+        <target dev='hdb' bus='ide'/>
+        <boot order='2'/>
+        </disk>
+        <disk type='file' device='disk'>
+        <driver name='qemu' type='raw'/>
+        <source file='/state/configdrive.img'/>
+        <target dev='hdc' bus='ide'/>
+        <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+        </disk>
+        <interface type='bridge'>
+        <source bridge='virbr0'/>
+        <mac address="{mac_address}"/>
+        </interface>
+        <input type='mouse' bus='ps2'/>
+        <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0' keymap='en-us'/>
+        </devices>
+        </domain>'''
 
-        # open xml
-        xml_for_virtual = _load_xml(BASE_DIR + '/config/{virname}.xml'.format(virname=virtual_name))
+        xml_for_virtual = example.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
 
         subprocess.Popen(
             'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
