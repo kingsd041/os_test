@@ -56,10 +56,7 @@ def ros_kvm():
                 else:
                     continue
 
-            if obj:
-                ip = str(obj, encoding='utf-8').split('(').__getitem__(1).split(')').__getitem__(0)
-            else:
-                ip = None
+            ip = str(obj, encoding='utf-8').split('(').__getitem__(1).split(')').__getitem__(0)
 
             time.sleep(60)
             if ip:
