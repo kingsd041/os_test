@@ -11,13 +11,14 @@ before_install:
 - pip install tox==3.5.2
 - pip install flake8==3.5.0
 - pip install codecov
-
+- pip install pytest-cov==2.6.0
 
 install: true
 
 script:
 - tox -epep8
+- tox -ecover
 
 
 after_success:
-- codecov #运行codecov
+- codecov
