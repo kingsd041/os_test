@@ -7,9 +7,9 @@ notifications:
 sudo: false
 
 before_install:
-- pip install codecov
-- pip install tox
-
+- pip install coverage=4.5.1
+- pip install tox=3.5.2
+- pip install flake8=3.5.0
 install: true
 
 script:
