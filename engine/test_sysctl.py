@@ -2,7 +2,7 @@
 # Create date: 2018-09-01
 # Author :Hailong
 
-#
+
 def test_sysctl(ros_kvm):
     """
     Test case for check sysctl after rancher os has been installed succeed.
