@@ -117,6 +117,18 @@ def ros_kvm():
     st.wait()
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--cmd_opt", action="store", default="http://192.168.1.24", help="Cloud-config"
+
+    )
+
+
+@pytest.fixture
+def cmd_opt(request):
+    return request.config.getoption("--cmd_opt")
+
+
 def setup_function():
     pass
 
