@@ -3,16 +3,10 @@
 # Author :Hailong
 
 
-def test_write_files(ros_kvm_with_paramiko, cmd_opt):
-    """
-    Test case for check write files after rancher os has been installed succeed.
-    :param ros_kvm_with_paramiko:
-    :return:
-    """
-
+def test_write_files(ros_kvm_with_paramiko, cloud_config_url):
     command = 'sudo cat /test'
     feed_back = 'console content'
-    client = ros_kvm_with_paramiko(cloud_config='{url}/test_write_files.yml'.format(url=cmd_opt))
+    client = ros_kvm_with_paramiko(cloud_config='{url}/test_write_files.yml'.format(url=cloud_config_url))
 
     stdin, stdout, stderr = client.exec_command(command, timeout=10)
     output = stdout.read().decode('utf-8')
