@@ -13,8 +13,6 @@ Automation test tool.
  Tox was used `virtualenv` to create environment, so, there was must be installed `virtualenv` for your base python environment.
  
  ```angular2html
-pip install virtualenv
-
 # If you have py3
 
 pip3 install virtualenv
@@ -37,7 +35,7 @@ source /your_env_name/bin/activate
     pip install -r requirements.txt
  ```
 
-* Run your test case with command `tox`
+* Run your test case with command `pytest -s engine/ --cmd_opt=cloud_config path`
 
 # Succeed tested with tox
 
