@@ -3,23 +3,22 @@
 # Author :Bowen Lee
 
 
-def test_dhcp_hostname(ros_kvm, cmd_opt):
+def test_dhcp_hostname(ros_kvm_with_paramiko, cmd_opt):
     """
     Test case for check dncp hostname after rancher os has been installed succeed.
-    :param ros_kvm:
+    :param ros_kvm_with_paramiko:
     :return:
     """
 
     command = 'hostname'
     feed_back = 'rancher'
-    client = ros_kvm(cloud_config='{url}/test_dncp_hostname.yml'.format(url=cmd_opt))
-    client.sendline(command)
-    number = client.expect(feed_back, timeout=20, searchwindowsize=None)
-    feed_back_content = str(client.after, encoding='utf-8')
+    client = ros_kvm_with_paramiko(cloud_config='{url}/test_dncp_hostname.yml'.format(url=cmd_opt))
+    stdin, stdout, stderr = client.exec_command(command, timeout=10)
+    output = stdout.read().decode('utf-8')
+    assert (feed_back in output)
 
     command_etc = 'cat /etc/hosts'
-    client.sendline(command_etc)
-    number_etc = client.expect(feed_back, timeout=20, searchwindowsize=None)
-    feed_back_etc_content = str(client.after, encoding='utf-8')
-    assert ((number == 0 and feed_back == feed_back_content)
-            and (number_etc == 0 and feed_back == feed_back_etc_content))
+    stdin, stdout, stderr = client.exec_command(command_etc, timeout=10)
+    output_etc = stdout.read().decode('utf-8')
+    client.close()
+    assert (output_etc in output_etc)
