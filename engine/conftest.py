@@ -112,7 +112,7 @@ def ros_kvm():
 
     dom.destroy()
     conn.close()
-    st = subprocess.Popen('sudo rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
+    st = subprocess.Popen('rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
                           shell=True)
     st.wait()
 
@@ -175,7 +175,7 @@ def ros_kvm_with_paramiko():
 
     dom.destroy()
     conn.close()
-    st = subprocess.Popen('sudo rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
+    st = subprocess.Popen('rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
                           shell=True)
     st.wait()
 
