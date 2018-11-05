@@ -27,4 +27,5 @@ def test_environment(ros_kvm_with_paramiko, cmd_opt):
     feed_back_c = 'BC=BC'
     stdin, stdout, stderr = client.exec_command(command_c, timeout=10)
     output_c = stdout.read().decode('utf-8')
+    client.close()
     assert (feed_back_c in output_c)
