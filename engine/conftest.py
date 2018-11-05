@@ -16,7 +16,7 @@ import pytest
 import paramiko
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EXAMPLE = '''<domain type='kvm'>
+KVM_XML = '''<domain type='kvm'>
         <name>{virtual_name}</name>
         <memory>2048000</memory>
         <currentMemory>2048000</currentMemory>
@@ -70,7 +70,7 @@ def ros_kvm():
         virtual_name = _id_generator()
         mac = _mac_generator()
 
-        xml_for_virtual = EXAMPLE.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
+        xml_for_virtual = KVM_XML.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
 
         subprocess.Popen(
             'qemu-img create -f qcow2 /opt/{virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
@@ -128,7 +128,7 @@ def ros_kvm_with_paramiko():
         virtual_name = _id_generator()
         mac = _mac_generator()
 
-        xml_for_virtual = EXAMPLE.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
+        xml_for_virtual = KVM_XML.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
 
         subprocess.Popen(
             'qemu-img create -f qcow2 /opt/{virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
