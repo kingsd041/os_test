@@ -16,20 +16,7 @@ import pytest
 import paramiko
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-@pytest.fixture
-def ros_kvm():
-    dom = None
-    conn = None
-    virtual_name = None
-
-    def _ros_kvm(cloud_config):
-        nonlocal virtual_name
-        virtual_name = _id_generator()
-        mac = _mac_generator()
-
-        example = '''<domain type='kvm'>
+EXAMPLE = '''<domain type='kvm'>
         <name>{virtual_name}</name>
         <memory>2048000</memory>
         <currentMemory>2048000</currentMemory>
@@ -52,7 +39,7 @@ def ros_kvm():
         <boot order='1'/>
         </disk>
         <disk type='file' device='cdrom'>
-        <source file='/root/rancheros-v1.4.2-rc1.iso'/>
+        <source file='/opt/os-tests/rancheros.iso'/>
         <target dev='hdb' bus='ide'/>
         <boot order='2'/>
         </disk>
@@ -71,10 +58,22 @@ def ros_kvm():
         </devices>
         </domain>'''
 
-        xml_for_virtual = example.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
+
+@pytest.fixture
+def ros_kvm():
+    dom = None
+    conn = None
+    virtual_name = None
+
+    def _ros_kvm(cloud_config):
+        nonlocal virtual_name
+        virtual_name = _id_generator()
+        mac = _mac_generator()
+
+        xml_for_virtual = EXAMPLE.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
 
         subprocess.Popen(
-            'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
+            'qemu-img create -f qcow2 /opt/{virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
             shell=True)
 
         nonlocal conn
@@ -113,7 +112,7 @@ def ros_kvm():
 
     dom.destroy()
     conn.close()
-    st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
+    st = subprocess.Popen('sudo rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
                           shell=True)
     st.wait()
 
@@ -129,52 +128,10 @@ def ros_kvm_with_paramiko():
         virtual_name = _id_generator()
         mac = _mac_generator()
 
-        example = '''<domain type='kvm'>
-        <name>{virtual_name}</name>
-        <memory>2048000</memory>
-        <currentMemory>2048000</currentMemory>
-        <vcpu>2</vcpu>
-        <os>
-        <type arch='x86_64' machine='pc'>hvm</type>
-        <bootmenu enable='no'/>
-        </os>
-        <features><acpi/><apic/><pae/></features>
-        <clock offset='localtime'/>
-        <on_poweroff>destroy</on_poweroff>
-        <on_reboot>restart</on_reboot>
-        <on_crash>destroy</on_crash>
-        <devices>
-        <emulator>/usr/bin/kvm-spice</emulator>
-        <disk type='file' device='disk'>
-        <driver name='qemu' type='qcow2'/>
-        <source file='/opt/{v_name_for_source}.qcow2' span="qcow2"/>
-        <target dev='hda' bus='ide'/>
-        <boot order='1'/>
-        </disk>
-        <disk type='file' device='cdrom'>
-        <source file='/root/rancheros-v1.4.2-rc1.iso'/>
-        <target dev='hdb' bus='ide'/>
-        <boot order='2'/>
-        </disk>
-        <disk type='file' device='disk'>
-        <driver name='qemu' type='raw'/>
-        <source file='/state/configdrive.img'/>
-        <target dev='hdc' bus='ide'/>
-        <address type='drive' controller='0' bus='1' target='0' unit='0'/>
-        </disk>
-        <interface type='bridge'>
-        <source bridge='virbr0'/>
-        <mac address="{mac_address}"/>
-        </interface>
-        <input type='mouse' bus='ps2'/>
-        <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0' keymap='en-us'/>
-        </devices>
-        </domain>'''
-
-        xml_for_virtual = example.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
+        xml_for_virtual = EXAMPLE.format(virtual_name=virtual_name, mac_address=mac, v_name_for_source=virtual_name)
 
         subprocess.Popen(
-            'cd /opt && qemu-img create -f qcow2 {virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
+            'qemu-img create -f qcow2 /opt/{virtual_name}.qcow2 10G'.format(virtual_name=virtual_name),
             shell=True)
 
         nonlocal conn
@@ -218,21 +175,21 @@ def ros_kvm_with_paramiko():
 
     dom.destroy()
     conn.close()
-    st = subprocess.Popen('cd /opt && sudo rm -rf {virtual_name}.qcow2'.format(virtual_name=virtual_name),
+    st = subprocess.Popen('sudo rm -rf /opt/{virtual_name}.qcow2'.format(virtual_name=virtual_name),
                           shell=True)
     st.wait()
 
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--cmd_opt", action="store", default="http://192.168.1.24", help="Cloud-config"
+        "--cloud_config_url", default="http://192.168.1.24", help="Cloud-config url"
 
     )
 
 
 @pytest.fixture
-def cmd_opt(request):
-    return request.config.getoption("--cmd_opt")
+def cloud_config_url(request):
+    return request.config.getoption("--cloud_config_url")
 
 
 def setup_function():
