@@ -12,5 +12,5 @@ def test_http_proxy(ros_kvm_with_paramiko, cloud_config_url):
 
     stdin, stdout, stderr = client.exec_command(command, timeout=10)
     output = stdout.read().decode('utf-8')
-
+    client.close()
     assert ((config_http and config_https and config_no_proxy) in output)

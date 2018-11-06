@@ -8,4 +8,5 @@ def test_lenient_service_parsing(ros_kvm_with_paramiko, cloud_config_url):
     client = ros_kvm_with_paramiko(cloud_config='{url}/test_lenient_service_parsing.yml'.format(url=cloud_config_url))
     stdin, stdout, stderr = client.exec_command(command, timeout=10)
     output = stdout.read().decode('utf-8')
+    client.close()
     assert ('test-parsing' in output)
