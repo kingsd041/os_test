@@ -35,7 +35,7 @@ source /your_env_name/bin/activate
     pip install -r requirements.txt
  ```
 
-* Run your test case with command `pytest -s engine/ --cmd_opt=cloud_config path`
+* Run your test case with command `pytest -s engine/ --cloud-config-url=cloud config path`
 
 # Succeed tested with tox
 

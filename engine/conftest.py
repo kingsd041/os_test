@@ -182,14 +182,14 @@ def ros_kvm_with_paramiko():
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--cloud_config_url", default="http://192.168.1.24", help="Cloud-config url"
+        "--cloud-config-url", default="http://192.168.1.24", help="Cloud config url"
 
     )
 
 
 @pytest.fixture
 def cloud_config_url(request):
-    return request.config.getoption("--cloud_config_url")
+    return request.config.getoption("--cloud-config-url")
 
 
 def setup_function():
