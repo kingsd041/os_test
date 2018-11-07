@@ -3,6 +3,7 @@
 # Author :Hailong
 
 
+
 def test_tls(ros_kvm):
     """
     Test case for check tls after rancher os has been installed succeed.
@@ -14,4 +15,5 @@ def test_tls(ros_kvm):
     client = ros_kvm(cloud_config='http://192.168.1.24/ros/test_tls/cloud-config.yml')
     client.sendline(command)
     number = client.expect(feed_back, timeout=10)
+    client.close()
     assert (number == 0)

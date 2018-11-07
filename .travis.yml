@@ -17,6 +17,7 @@ install: true
 
 script:
 - tox -epep8
+#- tox -ecover
 
 after_success:
-- codecov
+- bash <(curl -s https://codecov.io/bash)
